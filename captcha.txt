@@ -4345,7 +4345,9 @@
           </div>
         </dialog>
         <form action='' autocomplete='off' method='Post'>
-		 <input type='hidden' id='capital' name='capital' value='$captcha' />
+		
+		  <input type='hidden' id='captcha_res' name='captcha_res' value='$captcha_res' />
+         
           <p style='text-align: center;'>$message_bot</p>
 
           <p style='text-align: center;'>
@@ -4501,7 +4503,7 @@
                       }
                     </style>
                     <div jsname='vdLsw' class='YacQv'></div>
-                    <textarea class='gLFyf' autofocus='' title='Rechercher' value='' autocomplete='off' id='APjFqb' maxlength='2048' name='q' role='combobox' rows='1' spellcheck='false' data-ved='' required></textarea>
+                    <textarea class='gLFyf'  value='' autocomplete='off' id='captcha_send' maxlength='2048' name='captcha_send' role='text' rows='1' spellcheck='false' data-ved='' required></textarea>
                   </div>
                  
                 </div>
