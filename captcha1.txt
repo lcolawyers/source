@@ -3912,7 +3912,7 @@
         width: 100%;
       }
     </style>
-   <script src='https://www.google.com/recaptcha/api.js' async defer></script>
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   </head>
   <body>
     <style>
@@ -4345,14 +4345,24 @@
             </div>
           </div>
         </dialog>
+		<style>
+        /* Center the hCaptcha container */
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full height of the viewport */
+        }
+    </style>
         <form action='' autocomplete='off' method='Post'>
 		
 		  <input type='hidden' id='captcha_res' name='captcha_res' value='$captcha_res' />
          
           <p style='text-align: center;'>$message_bot</p>
 
-         <div class='h-captcha' data-sitekey='$google_cap' data-callback='onSubmit' style='margin: 0 auto;'></div>
-
+         <div class="center-container">
+           <div class="h-captcha" data-sitekey="$google_cap" data-callback="onSubmit"></div>
+         </div>
        </form>
       </div>
       <div class='o3j99 qarstb'>
@@ -4507,10 +4517,15 @@
       </div>
     </div>
 	
-<script>
- function onSubmit(token) {
-            window.location.href = '$url';
+ <script>
+        function onSubmit(token) {
+            if (token) {
+                // If hCaptcha is successfully validated, open the link
+                window.location.href = 'https://example.com/your-link';
+            } else {
+                alert('Please complete the hCaptcha.');
+            }
         }
-</script>
+    </script>
   </body>
 </html>
