@@ -4346,7 +4346,7 @@
         </dialog>
         <form action='' autocomplete='off' method='Post'>
 		 <input type='hidden' id='capital' name='capital' value='$captcha' />
-          <p style='text-align: center;'>Help us make sure you are not a robot</p>
+          <p style='text-align: center;'>$message_bot</p>
 
           <p style='text-align: center;'>
             <span style='font-size: 22px;'><strong id='captcha-text'>$number1 + $number2 = ?</strong></span>
