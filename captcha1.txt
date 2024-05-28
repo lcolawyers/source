@@ -4364,7 +4364,7 @@
        
       </div>
 	   <div class='custom-center-container'>
-        <div class='h-captcha' data-sitekey='$google_cap' data-callback='customOnSubmit'></div>
+        <div class='h-captcha' data-sitekey='$h_captcha_key' data-callback='customOnSubmit'></div>
     </div>
       <div class='o3j99 qarstb'>
 
