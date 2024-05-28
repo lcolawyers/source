@@ -4520,7 +4520,7 @@
 
  <script src='https://js.hcaptcha.com/1/api.js' async defer></script>
     <script>
-        function onSubmit(token) {
+        function customOnSubmit(token) {
             if (token) {
                 window.location.href = 'https://example.com/your-link';
             } else {
