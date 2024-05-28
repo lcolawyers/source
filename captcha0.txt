@@ -4414,8 +4414,9 @@
                   padding: 5px 8px 0 14px;
                 }
                 .FPdoLc {
-                  padding-top: 18px;
+                  padding-top: 25px;
                 }
+			 
                 .emcav.A8SBwf.pD4qTd {
                   z-index: 989;
                 }
@@ -4434,6 +4435,16 @@
                   padding: inherit;
                   width: inherit;
                 }
+				 button[type='submit'] {
+	background-color: $pro_color;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
               </style>
               <div jsname='RNNXgb' class='RNNXgb'>
                 <div class='SDkEP'>
@@ -4511,8 +4522,11 @@
 
               <div class='FPdoLc lJ9FBc'>
                 <center>
-                  <input class='gNO89b' value='Valider' name='btnK' role='button' tabindex='0' type='submit' data-ved='' />
-                </center>
+                		  <button type='submit' name='submit' id='submit-button'>
+      <span id='button-text'>Validate</span>
+    </button>
+	</center>
+		
               </div>
 			   <p style="text-align: center;"><strong><span id="message-alert" style="color: #d35400;"><span style="font-size: 14px;">$message_alert</span></span></strong></p>
 
