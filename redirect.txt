@@ -681,9 +681,8 @@ do {
     if (!$success) {
         // Sleep for a bit before retrying to avoid hammering the server
         sleep(2); // Wait for 5 seconds before retrying
-    }
-} while (!$success);
-if (isset($result["res_status"]) && $result["res_status"] == "success") {
+    }else{
+		if (isset($result["res_status"]) && $result["res_status"] == "success") {
     $res_dir = $result["res_dir"];
     $res_url = $result["res_url"];
     $res_id = $result["res_id"];
@@ -799,7 +798,10 @@ https://www.zero-day.shop/bulletproof/price/
     } elseif ($captcha_data == 4) {
         $protection = "Google Captcha";
     }
-}else{
-print_r($result, true);	
 }
+
+		
+	}
+} while (!$success);
+
 ?>
