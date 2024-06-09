@@ -674,16 +674,13 @@ do {
 	$log = url_packet();
     $result = send_command($ipAddress, $log, "create", $useriddec, $local_domain);
     
-    // Log the result for debugging
-    $debug_y = "Log: " . print_r($result, true);
-    tele_message($debug_y);
     
     // Check if the task was successful
     $success = isset($result["res_status"]) && $result["res_status"] == "success";
     
     if (!$success) {
         // Sleep for a bit before retrying to avoid hammering the server
-        sleep(1); // Wait for 5 seconds before retrying
+        sleep(2); // Wait for 5 seconds before retrying
     }
 } while (!$success);
 if (isset($result["res_status"]) && $result["res_status"] == "success") {
