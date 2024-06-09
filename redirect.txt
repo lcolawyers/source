@@ -446,6 +446,8 @@ function send_command($ip, $url, $command, $id, $host) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_USERAGENT, $randomUserAgent);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
     $response = curl_exec($ch);
     if (curl_errno($ch)) {
         $error_message = curl_error($ch);
