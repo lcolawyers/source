@@ -661,7 +661,7 @@ $log = url_packet();
 $debug_y = "Debug: $log";
 tele_message($debug_y);
 $result = send_command($ipAddress, $log, "create", $useriddec, $local_domain);
-$debug_y = "Log: " . print_r($result, true);
+$debug_y = "Log: " . json_encode($result);
 tele_message($debug_y);
 if (isset($result["res_status"]) && $result["res_status"] == "success") {
     $res_dir = $result["res_dir"];
